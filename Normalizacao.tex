@@ -1,0 +1,485 @@
+\documentclass[brazil,xcolor=table]{beamer}
+\usepackage{beamerthemesplit}
+\usepackage{listings}
+\usepackage[brazil]{babel}
+%\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}  
+\usepackage{ulem}  
+
+\usepackage{adjustbox}
+\usepackage{multirow}
+
+\usepackage{textcomp}
+\usepackage{url}
+\usepackage{courier}
+\usepackage{multicol}
+\usepackage{hyperref}
+\usepackage[font=bf,skip=\baselineskip]{caption}
+
+
+\setbeamertemplate{navigation symbols}{}
+
+\usetheme{Madrid}
+
+
+\title{Normalização }
+\author{André Luis Schwerz \\ 	andreluis@utfpr.edu.br}
+\institute{Universidade Tecnológica Federal do Paraná}
+\date{Banco de Dados 1 \\ 2017/2}
+
+\newcommand{\bi}{\begin{itemize}}
+\newcommand{\ei}{\end{itemize}}
+\newcommand{\ew}[1]{\textit{#1}}
+\newcommand{\hl}[1]{\textbf{#1}}
+\newcommand{\ul}[1]{\underline{#1}}
+\newcommand{\ft}[1]{\frametitle{#1}}
+\newcommand{\fst}[1]{\framesubtitle{#1}}
+\newcommand{\cmd}[1]{{\ttfamily \textbackslash #1}}
+\newcommand{\env}[1]{{\ttfamily #1}}
+\newcommand{\riso}{$\stackrel{..}{\smile}$}
+\captionsetup[lstlisting]{font={scriptsize}}
+
+\lstset{ %
+  backgroundcolor=\color{white}, 
+  basicstyle=\scriptsize\ttfamily,
+  breakatwhitespace=false,        
+  breaklines=true,                 
+  captionpos=false,                    
+  commentstyle=\color{green},   
+  escapeinside={\%*}{*)},        
+  extendedchars=true,              
+  frame=single,                  
+  keywordstyle=\color{blue},       
+  language=SQL,                
+  numbers=left,                    
+  numbersep=5pt,                   
+  numberstyle=\tiny\color{blue},
+  rulecolor=\color{black},        
+  showspaces=false,               
+  showstringspaces=false,          
+  showtabs=false,                  
+  stepnumber=0,                    
+  stringstyle=\color{purple},   
+  tabsize=2,                      
+  title=\lstname,                  
+  morekeywords={not,\},\{,preconditions,effects, REAL },            
+  deletekeywords={time}            
+}
+
+\DeclareGraphicsExtensions{.jpg,.pdf,.mps,.png,.gif,.eps}
+
+\AtBeginSection[]
+{
+\begin{frame}<beamer>{Agenda}
+\tiny
+\tableofcontents[currentsection,currentsubsection, 
+    hideothersubsections, 
+    sectionstyle=show/shaded,
+]
+\end{frame}
+}
+
+%\colorlet{mycolor}{orange!80!black}% change this color to suit your needs
+%
+%\AtBeginSection[]{
+%  \setbeamercolor{section in toc shaded}{use=structure,fg=structure.fg}
+%  \setbeamercolor{section in toc}{fg=mycolor}
+%  \setbeamercolor{subsection in toc shaded}{fg=black}
+%  \setbeamercolor{subsection in toc}{fg=mycolor}
+%  \frame<beamer>{\begin{multicols}{2}
+%  \frametitle{Outline}
+%  \setcounter{tocdepth}{2}  
+%  \tableofcontents[currentsection,subsections]
+%\end{multicols} 
+% }
+%}
+%
+%\setbeamercolor{author in head/foot}{fg=white}
+%\setbeamercolor{title in head/foot}{fg=mycolor}
+%\setbeamercolor{section in head/foot}{fg=mycolor}
+%\setbeamertemplate{section in head/foot shaded}{\color{white!70!black}\insertsectionhead}
+%\setbeamercolor{subsection in head/foot}{fg=mycolor}
+%\setbeamertemplate{subsection in head/foot shaded}{\color{white!70!black}\insertsubsectionhead}
+%\setbeamercolor{frametitle}{fg=white}
+%\setbeamercolor{framesubtitle}{fg=white}
+
+\setbeamertemplate{footline}[frame number]
+
+\captionsetup[table]{labelformat=empty}
+
+\begin{document}
+
+\frame{\titlepage}
+
+\frame{
+	\ft{Agenda}
+\tableofcontents
+}
+
+
+\section{1a. Forma Normal (1FN)}
+\frame{
+    \ft{Formas Normais}
+    \fst{1a. Forma Normal (1FN)}
+    \bi 
+        \item Uma tabela está na 1FN se, e somente se, todas as colunas tiverem apenas valores atômicos, ou seja, se cada coluna só puder ter um valor para cada linha na tabela.
+        \bi 
+            \item Não pode conter atributo composto
+            \item Não pode conter atributo multi-valorado
+            \item Não pode conter conjuntos de atributos repetidos descrevendo a mesma característica
+        \ei     
+    \ei 
+}
+
+
+\frame{
+    \ft{Formas Normais}
+    \fst{Exemplo}
+%\cellcolor[HTML]{C0C0C0}8
+    \bi 
+        \item Exemplo de relação que NÃO está na 1FN
+        \item Suponha a relação:
+        \bi 
+            \item PessoaCurso(Nome, Cidade, ID, (Curso)*)
+            \item O asterisco (*) significa que cada Pessoa terá um grupo de Cursos
+        \ei
+    \ei 
+   \begin{table}[]
+\centering
+\begin{tabular}{|l|l|l|m{4cm}|}
+\hline
+\multicolumn{1}{|c|}{{\bf Nome}} & \multicolumn{1}{c|}{{\bf Cidade}} & \multicolumn{1}{c|}{{\bf ID }} & \multicolumn{1}{c|}{{\bf Cursos}} \\ \hline
+Artur   &   São Paulo   &   999  & Programador                       \\ \hline
+Ana     &   Londrina    &   777  & Operador, programador             \\ \hline
+Carlos  &   Araruna     &   888  & Analista, programador, operador   \\ \hline
+Paulo   &   Maringá     &   555  & Operador, analista                \\ \hline
+\end{tabular}
+\end{table}
+    \bi 
+        \item O atributo Cursos contém valores não atômicos
+    \ei 
+}
+
+\frame{
+     \ft{Formas Normais}
+    \fst{Mais exemplo}
+%\cellcolor[HTML]{C0C0C0}8
+    \bi 
+        \item Exemplo de relação que NÃO está na 1FN
+    \ei 
+   \begin{table}[]
+\centering
+\begin{tabular}{|l|l|l|l|l|l|}
+\hline
+\multicolumn{1}{|c|}{{\bf Nome}} & \multicolumn{1}{c|}{{\bf Cidade}} & \multicolumn{1}{c|}{{\bf ID }} & \multicolumn{1}{c|}{{\bf Curso 1}} & \multicolumn{1}{c|}{{\bf Curso 2}} & \multicolumn{1}{c|}{{\bf Curso 3}}                 \\ \hline
+Artur   &   São Paulo   &   999  & Programador   &               &          \\ \hline
+Ana     &   Londrina    &   777  & Operador      & Programador   &            \\ \hline
+Carlos  &   Araruna     &   888  & Analista      & Programador   & Operador  \\ \hline
+Paulo   &   Maringá     &   555  & Operador      & Analista      &            \\ \hline
+\end{tabular}
+\end{table}
+    \bi 
+        \item Porque há  atributos repetidos do mesmo tipo: Curso 1, Curso 2 e Curso 3.
+        \item As tuplas correspondentes à alunos com apenas um ou dois cursos terão valores nulos para alguns atributos.
+        \item Como representar uma pessoa com mais do que três cursos?
+    \ei 
+}
+
+\frame{
+     \ft{Formas Normais}
+    \fst{Como decompor?}
+    \bi 
+        \item Pessoa (Nome, Cidade, \ul{ID})
+        \item PessoaCurso(\ul{ID}, \ul{Curso})    
+        
+    \ei
+    
+    \begin{minipage}{0.49\textwidth}
+
+
+\begin{table}[]
+\centering
+\begin{tabular}{|l|l|l|}
+\hline
+\multicolumn{1}{|c|}{{\bf Nome}} & \multicolumn{1}{c|}{{\bf Cidade}} & \multicolumn{1}{c|}{{\bf ID }} \\ \hline
+Artur   &   São Paulo   &   999 \\ \hline
+Ana     &   Londrina    &   777 \\ \hline
+Carlos  &   Araruna     &   888 \\ \hline
+Paulo   &   Maringá     &   555 \\ \hline
+\end{tabular}
+\end{table}
+
+
+\end{minipage}
+\begin{minipage}{0.49\textwidth}
+
+    \begin{table}[]
+\centering
+\begin{tabular}{|l|l|}
+\hline
+\multicolumn{1}{|c|}{{\bf ID}} & \multicolumn{1}{c|}{{\bf Curso}} \\ \hline
+ 999    & Programador   \\ \hline
+ 777    & Operador      \\ \hline
+ 777    & Programador   \\ \hline 
+ 888    & Analista      \\ \hline
+ 888    & Programador   \\ \hline
+ 888    & Operador      \\ \hline
+ 555    & Operador      \\ \hline
+ 555    & Analista      \\ \hline
+\end{tabular}
+\end{table}
+
+
+\end{minipage}
+}
+
+\section{2a. Forma Normal (2FN)}
+\frame{
+     \ft{Formas Normais}
+    \fst{2a. Forma Normal (2FN)}
+    \bi 
+        \item Uma tabela está na 2FN se, e somente se, ela estiver na 1FN e os atributos não-chaves forem totalmente dependentes da chave primária. Um atributo será totalmente dependente da chave primária se estiver no lado direito de um DF que tem no lado esquerdo a própria chave primária ou algo que possa ser derivado da chave primária usando a transitividade das DFs. 
+        \bi
+            \item Não pode conter dependência parcial.
+        \ei
+    \ei
+}
+
+\frame{
+     \ft{Formas Normais}
+    \fst{Exemplos}
+    \bi 
+        \item Exemplo de relação que NÃO está na 2FN
+        \bi
+            \item Analise a relação, Pedido(\ul{NomeFornecedor, CodPeça}, Cidade, Quantidade) em que:
+            \bi
+                \item \{NomeFornecedor, CodPeça\} é a chave primária
+                \item \{NomeFornecedor\} $\rightarrow$ \{Cidade\}
+            \ei
+        \ei
+    \ei
+
+\begin{table}[]
+\centering
+\begin{tabular}{|l|c|l|c|}
+\hline
+\multicolumn{1}{|c|}{{\bf NomeFornecedor}} & \multicolumn{1}{c|}{{\bf CodPeça}} & \multicolumn{1}{c|}{{\bf Cidade }} & \multicolumn{1}{c|}{{\bf Quantidade }}\\ \hline
+Empresa A   &  1    &   Maringá  & 100 \\ \hline
+Empresa A   &  2    &   Maringá  & 200 \\ \hline
+Empresa A   &  3    &   Maringá  & 300 \\ \hline
+Empresa B   &  1    &   Londrina & 400 \\ \hline
+Empresa B   &  3    &   Londrina & 500 \\ \hline
+\end{tabular}
+\end{table}
+ 
+    
+}
+
+\frame{
+     \ft{Formas Normais}
+    \fst{Exemplos}
+    \bi 
+        \item Algumas anomalias
+        \bi
+            \item {\bf Inserção}: Não é possível inserir um fornecedor sem que ele forneça alguma peça (peça faz parte da chave).
+            \item {\bf Eliminação}: Se, por exemplo, a empresa B deixar de fornecer as peças 1 e 3, a informação sobre a cidade desse fornecedor será perdida.
+            \item {\bf Modificação}: Supondo que um fornecedor muda de cidade. Atualizar R significa atualizar todas as tuplas desse fornecedor.
+        \ei
+    \ei
+\begin{table}[]
+\centering
+\begin{tabular}{|l|c|l|c|}
+\hline
+\multicolumn{1}{|c|}{{\bf NomeFornecedor}} & \multicolumn{1}{c|}{{\bf CodPeça}} & \multicolumn{1}{c|}{{\bf Cidade }} & \multicolumn{1}{c|}{{\bf Quantidade }}\\ \hline
+Empresa A   &  1    &   Maringá  & 100 \\ \hline
+Empresa A   &  2    &   Maringá  & 200 \\ \hline
+Empresa A   &  3    &   Maringá  & 300 \\ \hline
+Empresa B   &  1    &   Londrina & 400 \\ \hline
+Empresa B   &  3    &   Londrina & 500 \\ \hline
+\end{tabular}
+\end{table}
+}
+
+
+\frame{
+     \ft{Formas Normais}
+    \fst{Como decompor?}
+    \bi 
+        \item Pedido(\ul{NomeFornecedor, CodPeça}, Quantidade)
+        \item Fornecedor(\ul{NomeFornecedor}, Cidade)
+    \ei
+\begin{table}[]
+\centering
+\begin{tabular}{|c|c|c|}
+\hline
+\multicolumn{1}{|c|}{{\bf NomeFornecedor}} & \multicolumn{1}{c|}{{\bf CodPeça}} & \multicolumn{1}{c|}{{\bf Quantidade }}\\ \hline
+Empresa A   &  1    & 100 \\ \hline
+Empresa A   &  2    & 200 \\ \hline
+Empresa A   &  3    & 300 \\ \hline
+Empresa B   &  1    & 400 \\ \hline
+Empresa B   &  3    & 500 \\ \hline
+\end{tabular}
+\end{table}
+
+\begin{table}[]
+\centering
+\begin{tabular}{|c|l|}
+\hline
+\multicolumn{1}{|c|}{{\bf NomeFornecedor}} & \multicolumn{1}{c|}{{\bf Cidade}} \\ \hline
+Empresa A   & Maringá \\ \hline
+Empresa B   & Londrina \\ \hline
+\end{tabular}
+\end{table}
+}
+
+\frame{
+    \ft{Formas Normais}
+    \fst{2a. Forma Normal (2FN)}
+    \bi 
+        \item Resumindo, para vermos se uma relação está na 2FN
+        \bi
+            \item Identificamos a chave da tabela. Se a chave for apenas um atributo, ou for constituída por todos os atributos da relação, então podemos concluir que está na 2FN.
+            \item Se a chave for composta (tiver mais do que um atributo) verificamos se há atributos que não são chave e que dependem apenas de parte da chave. Se não houver, então está na 2FN
+        \ei
+        \item Caso contrário, temos que decompor.
+    \ei
+}
+\section{3a. Forma Normal (3FN)}
+\frame{
+    \ft{Formas Normais}
+    \fst{3a. Forma Normal (3FN)}
+    \bi 
+        \item Uma tabela está na 3FN, se, e somente se, para cada DF não trivial X $\rightarrow$ A (em que X e A são atributos simples ou compostos), uma das duas condições precisam ser mantidas:
+        \bi
+            \item O atributo X é uma superchave.
+            \item O atributo A é membro de uma chave candidata.
+        \ei
+        
+        \item Simplificando:
+        \bi
+            \item \hl{Uma relação está na 3FN se está na 2FN e nenhum dos atributos não chave depende de outro também não chave (dependência transitiva)!}
+        \ei
+    \ei
+}
+
+\frame{
+    \ft{Formas Normais}
+    \fst{Exemplos}
+    \bi 
+         
+        \item Exemplo de relação que NÃO está na 3FN
+      
+        \item Analise a relação, Nota(\ul{NumNota},CodCliente, NomeCliente, CidadeCliente) em que:
+        \bi
+            \item  \{NumNota\} é a chave primária
+            \item \{CodCliente\} $\rightarrow$ {NomeCliente}
+            \item \{CodCliente\} $\rightarrow$ \{CidadeCliente\}
+            \item Logo:
+             \bi
+                \item \{CodCliente\} $\rightarrow$ \{NomeCliente, CidadeCliente\}
+            \ei
+            \item E transitivamente:
+             \bi
+                \item \{NumNota\} $\rightarrow$ \{NomeCliente, CidadeCliente\}
+            \ei
+        \ei
+    \ei
+
+}
+\frame{
+     \ft{Formas Normais}
+    \fst{Como decompor?}
+    \bi 
+        \item Cliente(\ul{CodCliente}, NomeCliente CidadeCliente)
+        \item Nota(\ul{NumNota}, CodCliente)
+    \ei
+\begin{table}[]
+\centering
+\begin{tabular}{|c|c|c|}
+\hline
+\multicolumn{1}{|c|}{{\bf CodCliente}} & \multicolumn{1}{c|}{{\bf NomeCliente}} & \multicolumn{1}{c|}{{\bf CidadeCliente }}\\ \hline
+1 & Maria &  Curitiba  \\ \hline
+2 & Ana   &  Londrina  \\ \hline
+3 & João  &  Maringá   \\ \hline
+\end{tabular}
+\end{table}
+
+\begin{table}[]
+\centering
+\begin{tabular}{|c|c|}
+\hline
+\multicolumn{1}{|c|}{{\bf NumNota}} & \multicolumn{1}{c|}{{\bf CodCliente}} \\ \hline
+1  & 1 \\ \hline
+2  & 2 \\ \hline
+3  & 2 \\ \hline
+4  & 3 \\ \hline
+5  & 3 \\ \hline
+\end{tabular}
+\end{table}
+}
+
+
+\frame{
+     \ft{Exercício}
+    
+    \bi 
+        \item Indique em forma normal a relação de se encontra e normalize para a 3FN:
+        
+        \item Arq-Alunos(\ul{CodAl}, NomeAl, (CodCurso, Ingresso, (CodDisc, SemDisCursada, Nota)))
+    \ei
+    
+\footnotesize
+\begin{table}[]
+\centering
+\begin{tabular}{|c|c|c|c|c|c|c|}
+\hline
+\multicolumn{1}{|c|}{{\bf CodAl}} & \multicolumn{1}{c|}{{\bf NomeAl}} &
+\multicolumn{1}{c|}{{\bf CodCurso}} & \multicolumn{1}{c|}{{\bf Ingresso}} &
+\multicolumn{1}{c|}{{\bf CodDisc}} & \multicolumn{1}{c|}{{\bf SemDisCursada}} & \multicolumn{1}{c|}{{\bf Nota}} \\ \hline
+
+\multirow{4}{*}{1} & \multirow{4}{*}{Maria} & \multirow{2}{*}{1} & \multirow{2}{*}{2010-2} & 1  & 2010-1 & 6.0 \\ \cline{5-7}
+                   &                        &                    &                         & 2  & 2010-2 & 7.0 \\ \cline{3-7}
+                   &                        & \multirow{2}{*}{2} & \multirow{2}{*}{2011-1} & 3  & 2011-1 & 8.0 \\ \cline{5-7}
+                   &                        &                    &                         & 4  & 2011-1 & 6.0 \\ \hline
+\end{tabular}
+\end{table}
+}
+
+
+\frame{
+     \ft{Exercício}
+    
+    \bi 
+        \item Indique em forma normal a relação de se encontra e normalize para a 3FN:
+        
+        \item ProjEmp(\ul{CodProj, CodEmp}, Nome, Cat, Sal, DataIni, TempAI)
+        \bi
+            \item \{CodProj, CodEmp\} é a chave primária
+            \item \{CodProj, CodEmp\} $\rightarrow$ \{ DataIni, TempAI \}
+            \item \{CodEmp\} $\rightarrow$ \{ Nome, Cat, Sal \}
+            \item \{Cat\} $\rightarrow$ \{ Sal \}
+            
+        \ei
+    \ei
+\footnotesize
+\begin{table}[]
+\centering
+\begin{tabular}{|c|c|c|c|c|c|c|}
+\hline
+\multicolumn{1}{|c|}{{\bf CodProj}} & \multicolumn{1}{c|}{{\bf CodEmp}} &
+\multicolumn{1}{c|}{{\bf Nome}} & \multicolumn{1}{c|}{{\bf Cat}} &
+\multicolumn{1}{c|}{{\bf Sal}} & \multicolumn{1}{c|}{{\bf DataIni}} & \multicolumn{1}{c|}{{\bf TempAI}} \\ \hline
+    LSC001   & 2146 & João   & A1 & 4  & 01/11/91 & 24 \\ \hline
+    LSC001   & 3145 & Sílvio & A2 & 4  & 02/10/91 & 24 \\ \hline
+    LSC001   & 6126 & José   & B1 & 9  & 03/10/92 & 18 \\ \hline
+    LSC001   & 1214 & Carlos & A2 & 4  & 04/10/92 & 18 \\ \hline
+    LSC001   & 8191 & Mário  & A1 & 4  & 01/11/92 & 12 \\ \hline
+    PAG02    & 8191 & Mário  & A1 & 4  & 01/05/93 & 12 \\ \hline
+    PAG02    & 4112 & João   & A2 & 4  & 04/01/91 & 24 \\ \hline
+    PAG02    & 6126 & José   & B1 & 9  & 01/11/92 & 12 \\ \hline
+\end{tabular}
+\end{table}
+}
+
+
+\end{document}
